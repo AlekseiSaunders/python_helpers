@@ -8,10 +8,11 @@ def extract_fields(input_file, output_file, fields):
     
     # Extract the specified fields
     extracted_data = []
-    for item in data:
-        extracted_item = {field: item[field] for field in fields if field in item}
-        extracted_data.append(extracted_item)
-    
+    if isinstance(data, list):
+        extracted_data = [{field: item.get(field) for field in fields if item.get(field) is not None} for item in data]
+    if isinstance(data,dict):
+        extracted_data = {field: data.get(field) for field in fields if data.get(field) is not None}
+        
     # Write the extracted data to the output JSON file
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(extracted_data, f, indent=2, ensure_ascii=False)
